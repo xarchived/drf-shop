@@ -24,6 +24,8 @@ class ProductSerializer(CommonFieldsSerializer):
         fields = [
             *CommonFieldsSerializer.Meta.fields,
             'name',
+            'prices',
+            'prices_ids',
         ]
 
 
@@ -106,5 +108,6 @@ class PaymentSerializer(CommonFieldsSerializer):
         model = Payment
         fields = [
             *CommonFieldsSerializer.Meta.fields,
+            'order',
             'order_id',
         ]
