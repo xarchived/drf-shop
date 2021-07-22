@@ -7,6 +7,7 @@ from django.db.models import (
     IntegerChoices,
     BigIntegerField,
     IntegerField,
+    BooleanField,
 )
 
 from auther.models import User
@@ -45,3 +46,5 @@ class Payment(SafeDeleteModel, LogFieldsModel):
 
     order = ForeignKey(Order, on_delete=RESTRICT, related_name='payments')
     type_id = IntegerField(null=True, choices=Type.choices)
+    identity_token = TextField(null=True)
+    verify = BooleanField(null=False, default=False)
