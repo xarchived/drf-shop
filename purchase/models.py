@@ -44,7 +44,7 @@ class Payment(SafeDeleteModel, LogFieldsModel):
         CASH = 2
         ONLINE = 3
 
-    order = ForeignKey(Order, on_delete=RESTRICT, related_name='payments')
+    order = ForeignKey(Order, on_delete=RESTRICT, related_name='payments', null=True)
     type_id = IntegerField(null=True, choices=Type.choices)
     identity_token = TextField(null=True)
     verify = BooleanField(null=False, default=False)
