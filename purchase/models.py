@@ -47,4 +47,5 @@ class Payment(SafeDeleteModel, LogFieldsModel):
     order = ForeignKey(Order, on_delete=RESTRICT, related_name='payments', null=True)
     type_id = IntegerField(null=True, choices=Type.choices)
     identity_token = TextField(null=True)
+    ref_id = TextField(null=True)
     verify = BooleanField(null=False, default=False)
