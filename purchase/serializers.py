@@ -59,7 +59,6 @@ class PackageSerializer(ProductSerializer):
         queryset=Product.objects.all(),
         required=False,
         allow_null=True,
-
     )
 
     class Meta:
