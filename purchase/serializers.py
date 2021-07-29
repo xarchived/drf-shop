@@ -3,14 +3,14 @@ from rest_framework.relations import PrimaryKeyRelatedField
 
 from auther.models import User
 from auther.simples import SimpleUserSerializer
-from fancy.serializers import CommonFieldsSerializer
+from fancy.serializers import CommonFieldsSerializer, NestedModelSerializer
 from purchase.models import Product, Order, Payment, Package, Price
 from purchase.simples import SimpleProductSerializer, SimpleOrderSerializer, SimplePriceSerializer
 
 
-class ProductSerializer(CommonFieldsSerializer):
+class ProductSerializer(CommonFieldsSerializer, NestedModelSerializer):
     name = CharField(max_length=128)
-    prices = SimplePriceSerializer(many=True, read_only=True)
+    prices = SimplePriceSerializer(many=True)
     prices_ids = PrimaryKeyRelatedField(
         source='prices',
         many=True,
@@ -70,7 +70,7 @@ class PackageSerializer(ProductSerializer):
         ]
 
 
-class OrderSerializer(CommonFieldsSerializer):
+class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
     user = SimpleUserSerializer(read_only=True)
     user_id = PrimaryKeyRelatedField(
         source='user',

@@ -19,7 +19,7 @@ class Product(SafeDeleteModel, LogFieldsModel):
 
 
 class Price(SafeDeleteModel, LogFieldsModel):
-    product = ForeignKey(Product, on_delete=RESTRICT, related_name='prices')
+    product = ForeignKey(Product, on_delete=RESTRICT, related_name='prices', null=True)
     amount = BigIntegerField(null=False)
 
 
