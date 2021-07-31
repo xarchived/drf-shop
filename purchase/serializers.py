@@ -1,10 +1,13 @@
+from typing import Any
+
+from rest_framework.exceptions import APIException
 from rest_framework.fields import CharField, IntegerField
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from auther.models import User
 from auther.simples import SimpleUserSerializer
 from fancy.serializers import CommonFieldsSerializer, NestedModelSerializer
-from purchase.models import Product, Order, Payment, Package, Price
+from purchase.models import Product, Order, Payment, Package, Price, Item
 from purchase.simples import SimpleProductSerializer, SimpleOrderSerializer, SimplePriceSerializer
 
 
@@ -84,6 +87,18 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
         required=False,
         allow_null=True,
     )
+
+    def create(self, validated_data: dict) -> Any:
+        a = super().create(validated_data)
+        items = Item.objects.filter(order_id=a.pk)
+        for item in items:
+            price = Price.objects.filter(product_id=item.product.pk).last()
+            if price is None:
+                raise APIException("Price Not Found")
+            item.price = price
+            item.save()
+
+        return a
 
     class Meta:
         model = Order
