@@ -35,6 +35,7 @@ class Order(SafeDeleteModel, LogFieldsModel):
 class Item(Model):
     order = ForeignKey(Order, on_delete=RESTRICT, related_name='items')
     product = ForeignKey(Product, on_delete=RESTRICT, related_name='items')
+    price = ForeignKey(Price, on_delete=RESTRICT, related_name='items')
     duration = IntegerField(null=True)
 
 
