@@ -87,6 +87,11 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
         required=False,
         allow_null=True,
     )
+    duration = IntegerField(
+        required=False,
+        min_value=0,
+        max_value=999999999,
+    )
 
     def create(self, validated_data: dict) -> Any:
         order = super().create(validated_data)
@@ -108,6 +113,7 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
             'user_id',
             'products',
             'products_ids',
+            'duration',
         ]
 
 

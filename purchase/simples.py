@@ -27,6 +27,7 @@ class SimpleOrderSerializer(CommonFieldsSerializer):
         fields = [
             *CommonFieldsSerializer.Meta.fields,
             'user_id',
+            'duration',
         ]
 
 

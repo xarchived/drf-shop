@@ -7,7 +7,6 @@ from django.db.models import (
     IntegerChoices,
     BigIntegerField,
     IntegerField,
-    BooleanField,
 )
 
 from auther.models import User
@@ -30,13 +29,13 @@ class Package(Product):
 class Order(SafeDeleteModel, LogFieldsModel):
     user = ForeignKey(User, on_delete=RESTRICT, related_name='orders')
     products = ManyToManyField(Product, related_name='orders', through='Item')
+    duration = IntegerField(null=True)
 
 
 class Item(Model):
     order = ForeignKey(Order, on_delete=RESTRICT, related_name='items')
     product = ForeignKey(Product, on_delete=RESTRICT, related_name='items')
     price = ForeignKey(Price, on_delete=RESTRICT, related_name='items', null=True)
-    duration = IntegerField(null=True)
 
 
 class Payment(SafeDeleteModel, LogFieldsModel):
