@@ -35,6 +35,7 @@ class Order(SafeDeleteModel, LogFieldsModel):
 class Item(Model):
     order = ForeignKey(Order, on_delete=RESTRICT, related_name='items')
     product = ForeignKey(Product, on_delete=RESTRICT, related_name='items')
+    price = ForeignKey(Price, on_delete=RESTRICT, related_name='items', null=True)
     duration = IntegerField(null=True)
 
 
@@ -48,4 +49,3 @@ class Payment(SafeDeleteModel, LogFieldsModel):
     type_id = IntegerField(null=True, choices=Type.choices)
     identity_token = TextField(null=True)
     ref_id = TextField(null=True)
-    verify = BooleanField(null=False, default=False)
