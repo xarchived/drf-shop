@@ -49,4 +49,3 @@ class Payment(SafeDeleteModel, LogFieldsModel):
     type_id = IntegerField(null=True, choices=Type.choices)
     identity_token = TextField(null=True)
     ref_id = TextField(null=True)
-    verify = BooleanField(null=False, default=False)
