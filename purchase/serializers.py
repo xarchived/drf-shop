@@ -7,8 +7,12 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from auther.models import User
 from auther.simples import SimpleUserSerializer
 from fancy.serializers import CommonFieldsSerializer, NestedModelSerializer
-from purchase.models import Product, Order, Payment, Package, Price, Item
-from purchase.simples import SimpleProductSerializer, SimpleOrderSerializer, SimplePriceSerializer
+from purchase.models import Product, Order, Payment, Package, Price, Item, Subscribe
+from purchase.simples import (
+    SimpleProductSerializer,
+    SimpleOrderSerializer,
+    SimplePriceSerializer,
+)
 
 
 class ProductSerializer(CommonFieldsSerializer, NestedModelSerializer):
@@ -73,6 +77,21 @@ class PackageSerializer(ProductSerializer):
         ]
 
 
+class SubscribeSerializer(ProductSerializer):
+    duration = IntegerField(
+        required=False,
+        min_value=0,
+        max_value=999999999,
+    )
+
+    class Meta:
+        model = Subscribe
+        fields = [
+            *ProductSerializer.Meta.fields,
+            'duration',
+        ]
+
+
 class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
     user = SimpleUserSerializer(read_only=True)
     user_id = PrimaryKeyRelatedField(
@@ -86,11 +105,6 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
         queryset=Product.objects.all(),
         required=False,
         allow_null=True,
-    )
-    duration = IntegerField(
-        required=False,
-        min_value=0,
-        max_value=999999999,
     )
 
     def create(self, validated_data: dict) -> Any:
@@ -114,7 +128,6 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
             'user_id',
             'products',
             'products_ids',
-            'duration',
         ]
 
 

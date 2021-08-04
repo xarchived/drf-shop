@@ -1,11 +1,12 @@
 from fancy.viewsets import FancyViewSet
-from purchase.models import Product, Order, Payment, Price, Package
+from purchase.models import Product, Order, Payment, Price, Package, Subscribe
 from purchase.serializers import (
     ProductSerializer,
     OrderSerializer,
     PaymentSerializer,
     PriceSerializer,
     PackageSerializer,
+    SubscribeSerializer,
 )
 
 
@@ -22,6 +23,11 @@ class PriceViewSet(FancyViewSet):
 class PackageViewSet(FancyViewSet):
     queryset = Package.objects.all()
     serializer_class = PackageSerializer
+
+
+class SubscribeViewSet(FancyViewSet):
+    queryset = Subscribe.objects.all()
+    serializer_class = SubscribeSerializer
 
 
 class OrderViewSet(FancyViewSet):

@@ -1,5 +1,5 @@
 from fancy.serializers import CommonFieldsSerializer
-from purchase.models import Product, Order, Payment, Price
+from purchase.models import Product, Order, Payment, Price, Subscribe
 
 
 class SimpleProductSerializer(CommonFieldsSerializer):
@@ -21,13 +21,22 @@ class SimplePriceSerializer(CommonFieldsSerializer):
         ]
 
 
+class SimpleSubscribeSerializer(CommonFieldsSerializer):
+    class Meta:
+        model = Subscribe
+        fields = [
+            *CommonFieldsSerializer.Meta.fields,
+            'name',
+            'duration',
+        ]
+
+
 class SimpleOrderSerializer(CommonFieldsSerializer):
     class Meta:
         model = Order
         fields = [
             *CommonFieldsSerializer.Meta.fields,
             'user_id',
-            'duration',
         ]
 
 

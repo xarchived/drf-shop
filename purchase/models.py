@@ -26,10 +26,13 @@ class Package(Product):
     products = ManyToManyField(Product, related_name='packages')
 
 
+class Subscribe(Product):
+    duration = IntegerField(null=True)
+
+
 class Order(SafeDeleteModel, LogFieldsModel):
     user = ForeignKey(User, on_delete=RESTRICT, related_name='orders')
     products = ManyToManyField(Product, related_name='orders', through='Item')
-    duration = IntegerField(null=True)
 
 
 class Item(Model):
