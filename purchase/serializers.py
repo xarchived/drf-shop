@@ -99,7 +99,8 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
         for item in items:
             price = Price.objects.filter(product_id=item.product.pk).last()
             if price is None:
-                raise APIException("Price Not Found")
+                # TODO: raise a custom error
+                raise APIException('Price Not Found')
             item.price = price
             item.save()
 
