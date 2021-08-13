@@ -1,7 +1,7 @@
 from typing import Any
 
 from rest_framework.exceptions import APIException
-from rest_framework.fields import CharField, IntegerField
+from rest_framework.fields import CharField, IntegerField, ChoiceField
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from auther.models import User
@@ -137,6 +137,14 @@ class PaymentSerializer(CommonFieldsSerializer):
         source='order',
         queryset=Order.objects.all(),
     )
+    type = CharField(source='get_type_id_display', read_only=True)
+    type_id = ChoiceField(
+        choices=Payment.Type.choices,
+        allow_null=True,
+        required=False,
+    )
+    identity_token = CharField(min_length=5, max_length=150, required=False)
+    ref_id = CharField(min_length=5, max_length=150, required=False)
 
     class Meta:
         model = Payment
@@ -144,4 +152,8 @@ class PaymentSerializer(CommonFieldsSerializer):
             *CommonFieldsSerializer.Meta.fields,
             'order',
             'order_id',
+            'type',
+            'type_id',
+            'identity_token',
+            'ref_id',
         ]
