@@ -1,6 +1,6 @@
 from rest_framework.routers import SimpleRouter
 
-from purchase.selves import SelfPaymentViewSet, SelfOrderViewSet
+from purchase.selves import SelfPaymentViewSet, SelfOrderViewSet, SelfPurchasedSubscribe
 from purchase.views import ProductViewSet, OrderViewSet, PaymentViewSet, PriceViewSet, PackageViewSet, SubscribeViewSet
 
 router = SimpleRouter()
@@ -12,5 +12,6 @@ router.register(r'orders', OrderViewSet)
 router.register(r'payments', PaymentViewSet)
 router.register(r'self_payments', SelfPaymentViewSet)
 router.register(r'self_orders', SelfOrderViewSet)
+router.register(r'self_purchased_subscribe', SelfPurchasedSubscribe)
 
 urlpatterns = router.urls
