@@ -12,6 +12,6 @@ router.register(r'orders', OrderViewSet)
 router.register(r'payments', PaymentViewSet)
 router.register(r'self_payments', SelfPaymentViewSet)
 router.register(r'self_orders', SelfOrderViewSet)
-router.register(r'self_purchased_subscribe', SelfPurchasedSubscribe)
+router.register(r'self_purchased_subscribes', SelfPurchasedSubscribe)
 
 urlpatterns = router.urls
