@@ -1,10 +1,11 @@
 from fancy.decorators import queryset_credential_handler
 from fancy.viewsets import FancySelfViewSet, FancyViewSet
-from purchase.models import Order, Payment, Subscribe
+from purchase.models import Order, Payment, Subscribe, Product
 from purchase.serializers import (
     OrderSerializer,
     PaymentSerializer,
     SubscribeSerializer,
+    ProductSerializer,
 )
 from purchase.utils import get_active_subscribes
 
@@ -28,3 +29,14 @@ class SelfActiveSubscribe(FancyViewSet):
     @queryset_credential_handler
     def get_queryset(self):
         return get_active_subscribes(user_id=self.credential['id'])
+
+
+class SelfActiveProduct(FancyViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    @queryset_credential_handler
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            orders__products__in=get_active_subscribes(user_id=self.credential['id'])
+        )
