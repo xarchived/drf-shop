@@ -7,7 +7,7 @@ from purchase.serializers import (
     SubscribeSerializer,
     ProductSerializer,
 )
-from purchase.utils import get_active_subscribes
+from purchase.utils import get_active_subscribes, get_active_products
 
 
 class SelfOrderViewSet(FancySelfViewSet):
@@ -37,6 +37,4 @@ class SelfActiveProduct(FancyViewSet):
 
     @queryset_credential_handler
     def get_queryset(self):
-        return super().get_queryset().filter(
-            orders__products__in=get_active_subscribes(user_id=self.credential['id'])
-        )
+        return get_active_products(user_id=self.credential['id'])
