@@ -25,7 +25,7 @@ class SelfPaymentViewSet(FancySelfViewSet):
     self_field = 'user_id'
 
 
-class SelfPurchasedSubscribe(FancyViewSet):
+class SelfActiveSubscribe(FancyViewSet):
     queryset = Subscribe.objects.all()
     serializer_class = SubscribeSerializer
 
