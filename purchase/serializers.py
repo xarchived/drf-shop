@@ -109,15 +109,17 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
         allow_null=True,
     )
 
-    def create(self, validated_data: dict) -> Any:
+    @staticmethod
+    def _check_order_limitation(validated_data: dict):
         for product in validated_data['products']:
             count = Item.objects.filter(product=product).count()
             if product.order_limit and count > product.order_limit:
+                # TODO: raise a custom error
                 raise APIException('Limit')
 
-        order = super().create(validated_data)
-
-        items = Item.objects.filter(order_id=order.pk)
+    @staticmethod
+    def _update_item_prices(order: Order):
+        items = Item.objects.filter(order=order)
         for item in items:
             price = Price.objects.filter(product_id=item.product.pk).last()
             if price is None:
@@ -126,6 +128,10 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
             item.price = price
             item.save()
 
+    def create(self, validated_data: dict) -> Any:
+        self._check_order_limitation(validated_data)
+        order = super().create(validated_data)
+        self._update_item_prices(order)
         return order
 
     class Meta:
