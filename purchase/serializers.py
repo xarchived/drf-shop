@@ -109,29 +109,27 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
         allow_null=True,
     )
 
-    @staticmethod
-    def _check_order_limitation(validated_data: dict):
-        for product in validated_data['products']:
-            count = Item.objects.filter(product=product).count()
-            if product.order_limit and count > product.order_limit:
-                # TODO: raise a custom error
-                raise APIException('Limit')
-
-    @staticmethod
-    def _update_item_prices(order: Order):
-        items = Item.objects.filter(order=order)
-        for item in items:
-            price = Price.objects.filter(product_id=item.product.pk).last()
-            if price is None:
-                # TODO: raise a custom error
-                raise APIException('Price Not Found')
-            item.price = price
-            item.save()
-
     def create(self, validated_data: dict) -> Any:
-        self._check_order_limitation(validated_data)
+        def check_order_limitation(_validated_data: dict):
+            for product in _validated_data['products']:
+                count = Item.objects.filter(product=product).count()
+                if product.order_limit and count > product.order_limit:
+                    # TODO: raise a custom error
+                    raise APIException('Limit')
+
+        def update_item_prices(_order: Order):
+            items = Item.objects.filter(order=_order)
+            for item in items:
+                price = Price.objects.filter(product_id=item.product.pk).last()
+                if price is None:
+                    # TODO: raise a custom error
+                    raise APIException('Price Not Found')
+                item.price = price
+                item.save()
+
+        check_order_limitation(validated_data)
         order = super().create(validated_data)
-        self._update_item_prices(order)
+        update_item_prices(order)
         return order
 
     class Meta:
