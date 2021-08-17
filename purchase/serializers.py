@@ -110,7 +110,13 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
     )
 
     def create(self, validated_data: dict) -> Any:
+        for product in validated_data['products']:
+            count = Item.objects.filter(product=product).count()
+            if product.order_limit and count > product.order_limit:
+                raise APIException('Limit')
+
         order = super().create(validated_data)
+
         items = Item.objects.filter(order_id=order.pk)
         for item in items:
             price = Price.objects.filter(product_id=item.product.pk).last()
