@@ -8,6 +8,7 @@ class SimpleProductSerializer(CommonFieldsSerializer):
         fields = [
             *CommonFieldsSerializer.Meta.fields,
             'name',
+            'order_limit',
         ]
 
 

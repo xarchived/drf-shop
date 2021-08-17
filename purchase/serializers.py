@@ -17,6 +17,7 @@ from purchase.simples import (
 
 class ProductSerializer(CommonFieldsSerializer, NestedModelSerializer):
     name = CharField(max_length=128)
+    order_limit = IntegerField(required=False, allow_null=True, min_value=1, max_value=999)
     prices = SimplePriceSerializer(many=True)
     prices_ids = PrimaryKeyRelatedField(
         source='prices',
@@ -31,6 +32,7 @@ class ProductSerializer(CommonFieldsSerializer, NestedModelSerializer):
         fields = [
             *CommonFieldsSerializer.Meta.fields,
             'name',
+            'order_limit',
             'prices',
             'prices_ids',
         ]
