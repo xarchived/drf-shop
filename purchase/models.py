@@ -15,6 +15,7 @@ from fancy.models import SafeDeleteModel, LogFieldsModel
 
 class Product(SafeDeleteModel, LogFieldsModel):
     name = TextField(null=True)
+    order_limit = IntegerField(null=True)
 
 
 class Price(SafeDeleteModel, LogFieldsModel):
