@@ -46,6 +46,7 @@ class Payment(SafeDeleteModel, LogFieldsModel):
         REMISSION = 1
         CASH = 2
         ONLINE = 3
+        FREE = 4
 
     order = ForeignKey(Order, on_delete=RESTRICT, related_name='payments', null=True)
     type_id = IntegerField(null=True, choices=Type.choices)
