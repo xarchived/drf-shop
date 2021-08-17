@@ -8,7 +8,7 @@ from purchase.models import Subscribe, Product, Order
 
 def get_active_subscribes(user_id: int) -> QuerySet:
     return Subscribe.objects.filter(
-        Q(inserted_at__gt=timezone.now() - timedelta(days=1) * F('duration')) &
+        Q(orders__inserted_at__gt=timezone.now() - timedelta(days=1) * F('duration')) &
         Q(orders__payments__ref_id__isnull=False) &
         (
                 Q(orders__user_id=user_id) |
