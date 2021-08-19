@@ -8,7 +8,7 @@ from purchase.exceptions import EmptyPriceError
 from purchase.models import Subscribe, Product, Order, Price
 
 
-def get_active_subscribes(user_id: int) -> QuerySet:
+def active_subscribes(user_id: int) -> QuerySet:
     return Subscribe.objects.filter(
         Q(orders__inserted_at__gt=timezone.now() - timedelta(days=1) * F('duration')) &
         Q(orders__payments__ref_id__isnull=False) &
@@ -19,9 +19,9 @@ def get_active_subscribes(user_id: int) -> QuerySet:
     ).distinct()
 
 
-def get_active_products(user_id: int) -> QuerySet:
+def active_products(user_id: int) -> QuerySet:
     return Product.objects.filter(
-        orders__products__in=get_active_subscribes(user_id=user_id)
+        orders__products__in=active_subscribes(user_id=user_id)
     ).distinct()
 
 
