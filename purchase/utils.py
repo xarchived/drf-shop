@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.db.models import Q, F, QuerySet
 from django.utils import timezone
 
+from purchase.exceptions import EmptyPriceError
 from purchase.models import Subscribe, Product, Order
 
 
@@ -26,4 +27,11 @@ def get_active_products(user_id: int) -> QuerySet:
 def calculate_total_amount(order_id: int) -> int:
     order = Order.objects.get(pk=order_id)
 
-    return sum([item.price.amount for item in order.items.all()])
+    total = 0
+    for item in order.items.all():
+        if not item.price:
+            raise EmptyPriceError()
+
+        total += item.price.amount
+
+    return total
