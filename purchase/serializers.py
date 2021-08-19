@@ -6,13 +6,14 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from auther.models import User, Role
 from auther.simples import SimpleUserSerializer, SimpleRoleSerializer
 from fancy.serializers import CommonFieldsSerializer, NestedModelSerializer
-from purchase.exceptions import LimitExceededError, EmptyPriceError
+from purchase.exceptions import LimitExceededError
 from purchase.models import Product, Order, Payment, Package, Price, Item, Subscribe
 from purchase.simples import (
     SimpleProductSerializer,
     SimpleOrderSerializer,
     SimplePriceSerializer,
 )
+from purchase.utils import current_product_price
 
 
 class ProductSerializer(CommonFieldsSerializer, NestedModelSerializer):
@@ -123,18 +124,15 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
                 if product.order_limit and count > product.order_limit:
                     raise LimitExceededError()
 
-        def update_item_prices(_order: Order) -> None:
+        def update_item_prices(_order: Order, user: User) -> None:
             items = Item.objects.filter(order=_order)
             for item in items:
-                price = Price.objects.filter(product_id=item.product.id).last()
-                if price is None:
-                    raise EmptyPriceError()
-                item.price = price
+                item.price = current_product_price(item.product, user)
                 item.save()
 
         check_order_limitation(validated_data)
         order = super().create(validated_data)
-        update_item_prices(order)
+        update_item_prices(order, validated_data['user'])
         return order
 
     class Meta:

@@ -3,8 +3,9 @@ from datetime import timedelta
 from django.db.models import Q, F, QuerySet
 from django.utils import timezone
 
+from auther.models import User
 from purchase.exceptions import EmptyPriceError
-from purchase.models import Subscribe, Product, Order
+from purchase.models import Subscribe, Product, Order, Price
 
 
 def get_active_subscribes(user_id: int) -> QuerySet:
@@ -22,6 +23,21 @@ def get_active_products(user_id: int) -> QuerySet:
     return Product.objects.filter(
         orders__products__in=get_active_subscribes(user_id=user_id)
     ).distinct()
+
+
+def current_product_price(product: Product, user: User) -> Price:
+    role = user.roles.order_by('-level').first()
+    price = Price.objects.filter(
+        Q(product=product) & (
+                Q(role=role) |
+                Q(role=None)
+        )
+    ).order_by('-id').first()
+
+    if price is None:
+        raise EmptyPriceError(f'No price found for "{role.name}"')
+
+    return price
 
 
 def calculate_total_amount(order_id: int) -> int:
