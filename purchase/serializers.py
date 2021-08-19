@@ -126,7 +126,7 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
         def update_item_prices(_order: Order) -> None:
             items = Item.objects.filter(order=_order)
             for item in items:
-                price = Price.objects.filter(product_id=item.product.pk).last()
+                price = Price.objects.filter(product_id=item.product.id).last()
                 if price is None:
                     raise EmptyPriceError()
                 item.price = price

@@ -25,7 +25,7 @@ def get_active_products(user_id: int) -> QuerySet:
 
 
 def calculate_total_amount(order_id: int) -> int:
-    order = Order.objects.get(pk=order_id)
+    order = Order.objects.get(id=order_id)
 
     total = 0
     for item in order.items.all():
