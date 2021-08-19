@@ -1,12 +1,12 @@
 from typing import Any
 
-from rest_framework.exceptions import APIException
 from rest_framework.fields import CharField, IntegerField, ChoiceField
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from auther.models import User
 from auther.simples import SimpleUserSerializer
 from fancy.serializers import CommonFieldsSerializer, NestedModelSerializer
+from purchase.exceptions import LimitExceededError, EmptyPriceError
 from purchase.models import Product, Order, Payment, Package, Price, Item, Subscribe
 from purchase.simples import (
     SimpleProductSerializer,
@@ -114,16 +114,14 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
             for product in _validated_data['products']:
                 count = Item.objects.filter(product=product, user_id=_validated_data['user_id']).count()
                 if product.order_limit and count > product.order_limit:
-                    # TODO: raise a custom error
-                    raise APIException('Limit')
+                    raise LimitExceededError()
 
         def update_item_prices(_order: Order) -> None:
             items = Item.objects.filter(order=_order)
             for item in items:
                 price = Price.objects.filter(product_id=item.product.pk).last()
                 if price is None:
-                    # TODO: raise a custom error
-                    raise APIException('Price Not Found')
+                    raise EmptyPriceError()
                 item.price = price
                 item.save()
 
