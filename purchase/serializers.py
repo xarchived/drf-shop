@@ -3,8 +3,8 @@ from typing import Any
 from rest_framework.fields import CharField, IntegerField, ChoiceField
 from rest_framework.relations import PrimaryKeyRelatedField
 
-from auther.models import User
-from auther.simples import SimpleUserSerializer
+from auther.models import User, Role
+from auther.simples import SimpleUserSerializer, SimpleRoleSerializer
 from fancy.serializers import CommonFieldsSerializer, NestedModelSerializer
 from purchase.exceptions import LimitExceededError, EmptyPriceError
 from purchase.models import Product, Order, Payment, Package, Price, Item, Subscribe
@@ -44,6 +44,11 @@ class PriceSerializer(CommonFieldsSerializer):
         source='product',
         queryset=Product.objects.all(),
     )
+    role = SimpleRoleSerializer(read_only=True)
+    role_id = PrimaryKeyRelatedField(
+        source='role',
+        queryset=Role.objects.all(),
+    )
     amount = IntegerField(
         required=True,
         min_value=0,
@@ -56,6 +61,8 @@ class PriceSerializer(CommonFieldsSerializer):
             *CommonFieldsSerializer.Meta.fields,
             'product',
             'product_id',
+            'role',
+            'role_id',
             'amount',
         ]
 

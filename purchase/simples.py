@@ -18,6 +18,7 @@ class SimplePriceSerializer(CommonFieldsSerializer):
         fields = [
             *CommonFieldsSerializer.Meta.fields,
             'product_id',
+            'role_id',
             'amount',
         ]
 

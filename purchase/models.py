@@ -9,7 +9,7 @@ from django.db.models import (
     IntegerField,
 )
 
-from auther.models import User
+from auther.models import User, Role
 from fancy.models import SafeDeleteModel, LogFieldsModel
 
 
@@ -20,6 +20,7 @@ class Product(SafeDeleteModel, LogFieldsModel):
 
 class Price(SafeDeleteModel, LogFieldsModel):
     product = ForeignKey(Product, on_delete=RESTRICT, related_name='prices', null=True)
+    role = ForeignKey(Role, on_delete=RESTRICT, related_name='prices', null=True)
     amount = BigIntegerField(null=False)
 
 
