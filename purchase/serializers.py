@@ -117,22 +117,24 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
         allow_null=True,
     )
 
+    @staticmethod
+    def _check_order_limitation(products: list, user: User) -> None:
+        for product in products:
+            count = Item.objects.filter(product=product, order__user=user).count()
+            if product.order_limit and count > product.order_limit:
+                raise LimitExceededError()
+
+    @staticmethod
+    def _update_item_prices(order: Order, user: User) -> None:
+        items = Item.objects.filter(order=order)
+        for item in items:
+            item.price = current_product_price(product=item.product, user=user)
+            item.save()
+
     def create(self, validated_data: dict) -> Any:
-        def check_order_limitation(products: list, user: User) -> None:
-            for product in products:
-                count = Item.objects.filter(product=product, order__user=user).count()
-                if product.order_limit and count > product.order_limit:
-                    raise LimitExceededError()
-
-        def update_item_prices(_order: Order, user: User) -> None:
-            items = Item.objects.filter(order=_order)
-            for item in items:
-                item.price = current_product_price(product=item.product, user=user)
-                item.save()
-
-        check_order_limitation(products=validated_data['products'], user=validated_data['user'])
+        self._check_order_limitation(products=validated_data['products'], user=validated_data['user'])
         order = super().create(validated_data=validated_data)
-        update_item_prices(_order=order, user=validated_data['user'])
+        self._update_item_prices(order=order, user=validated_data['user'])
         return order
 
     class Meta:
