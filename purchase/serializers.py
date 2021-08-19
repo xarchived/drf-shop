@@ -119,7 +119,7 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
     def create(self, validated_data: dict) -> Any:
         def check_order_limitation(_validated_data: dict) -> None:
             for product in _validated_data['products']:
-                count = Item.objects.filter(product=product, user_id=_validated_data['user_id']).count()
+                count = Item.objects.filter(product=product, order__user=_validated_data['user']).count()
                 if product.order_limit and count > product.order_limit:
                     raise LimitExceededError()
 
