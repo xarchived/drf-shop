@@ -32,7 +32,7 @@ def current_product_price(product: Product, user: User) -> Price:
                 Q(role=role) |
                 Q(role=None)
         )
-    ).order_by('-id').first()
+    ).order_by('role_id', '-id').first()
 
     if price is None:
         raise EmptyPriceError(f'No price found for "{role.name}"')
