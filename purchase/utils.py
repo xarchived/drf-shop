@@ -40,7 +40,7 @@ def current_product_price(product: Product, user: User) -> Price:
     return price
 
 
-def calculate_total_amount(order_id: int) -> int:
+def order_total_price(order_id: int) -> int:
     order = Order.objects.get(id=order_id)
 
     total = 0
