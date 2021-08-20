@@ -1,5 +1,7 @@
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+
 from fancy.decorators import queryset_credential_handler
-from fancy.viewsets import FancySelfViewSet, FancyViewSet
+from fancy.views import SelfAPIView, CredentialAPIView
 from purchase.models import Order, Payment, Subscribe, Product
 from purchase.serializers import (
     OrderSerializer,
@@ -10,19 +12,19 @@ from purchase.serializers import (
 from purchase.utils import active_subscribes, active_products
 
 
-class SelfOrderViewSet(FancySelfViewSet):
+class SelfOrderViewSet(ReadOnlyModelViewSet, SelfAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     self_field = 'user_id'
 
 
-class SelfPaymentViewSet(FancySelfViewSet):
+class SelfPaymentViewSet(ReadOnlyModelViewSet, SelfAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     self_field = 'user_id'
 
 
-class SelfActiveSubscribe(FancyViewSet):
+class SelfActiveSubscribe(ReadOnlyModelViewSet, CredentialAPIView):
     queryset = Subscribe.objects.all()
     serializer_class = SubscribeSerializer
 
@@ -31,7 +33,7 @@ class SelfActiveSubscribe(FancyViewSet):
         return active_subscribes(user_id=self.credential['id'])
 
 
-class SelfActiveProduct(FancyViewSet):
+class SelfActiveProduct(ReadOnlyModelViewSet, CredentialAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 

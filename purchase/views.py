@@ -1,4 +1,5 @@
-from fancy.viewsets import FancyViewSet
+from rest_framework.viewsets import ModelViewSet
+
 from purchase.models import Product, Order, Payment, Price, Package, Subscribe
 from purchase.serializers import (
     ProductSerializer,
@@ -10,31 +11,31 @@ from purchase.serializers import (
 )
 
 
-class ProductViewSet(FancyViewSet):
+class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 
-class PriceViewSet(FancyViewSet):
+class PriceViewSet(ModelViewSet):
     queryset = Price.objects.all()
     serializer_class = PriceSerializer
 
 
-class PackageViewSet(FancyViewSet):
+class PackageViewSet(ModelViewSet):
     queryset = Package.objects.all()
     serializer_class = PackageSerializer
 
 
-class SubscribeViewSet(FancyViewSet):
+class SubscribeViewSet(ModelViewSet):
     queryset = Subscribe.objects.all()
     serializer_class = SubscribeSerializer
 
 
-class OrderViewSet(FancyViewSet):
+class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
 
-class PaymentViewSet(FancyViewSet):
+class PaymentViewSet(ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
