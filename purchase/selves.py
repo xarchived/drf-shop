@@ -1,7 +1,6 @@
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from django.db.models import QuerySet
 
-from fancy.decorators import queryset_credential_handler
-from fancy.views import SelfAPIView, CredentialAPIView
+from fancy.viewsets import ReadOnlySelfModelViewSet, SelfModelViewSet
 from purchase.models import Order, Payment, Subscribe, Product
 from purchase.serializers import (
     OrderSerializer,
@@ -12,31 +11,29 @@ from purchase.serializers import (
 from purchase.utils import active_subscribes, active_products
 
 
-class SelfOrderViewSet(ReadOnlyModelViewSet, SelfAPIView):
+class SelfOrderViewSet(SelfModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     self_field = 'user_id'
 
 
-class SelfPaymentViewSet(ReadOnlyModelViewSet, SelfAPIView):
+class SelfPaymentViewSet(ReadOnlySelfModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     self_field = 'user_id'
 
 
-class SelfActiveSubscribe(ReadOnlyModelViewSet, CredentialAPIView):
+class SelfActiveSubscribe(ReadOnlySelfModelViewSet):
     queryset = Subscribe.objects.all()
     serializer_class = SubscribeSerializer
 
-    @queryset_credential_handler
-    def get_queryset(self):
-        return active_subscribes(user_id=self.credential['id'])
+    def self_func(self, queryset: QuerySet, credential_id: int) -> QuerySet:
+        return active_subscribes(user_id=credential_id)
 
 
-class SelfActiveProduct(ReadOnlyModelViewSet, CredentialAPIView):
+class SelfActiveProduct(ReadOnlySelfModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-    @queryset_credential_handler
-    def get_queryset(self):
-        return active_products(user_id=self.credential['id'])
+    def self_func(self, queryset: QuerySet, credential_id: int) -> QuerySet:
+        return active_products(user_id=credential_id)
