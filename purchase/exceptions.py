@@ -4,7 +4,7 @@ from rest_framework.exceptions import APIException
 
 
 class LimitExceededError(APIException):
-    status_code = status.HTTP_403_FORBIDDEN
+    status_code = status.HTTP_409_CONFLICT
     default_detail = _('order limit exceeded')
 
 
