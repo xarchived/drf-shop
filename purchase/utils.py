@@ -35,7 +35,7 @@ def current_product_price(product: Product, user: User) -> Price:
     ).order_by('role_id', '-id').first()
 
     if price is None:
-        raise EmptyPriceError(f'No price found for "{role.name}"')
+        raise EmptyPriceError()
 
     return price
 
