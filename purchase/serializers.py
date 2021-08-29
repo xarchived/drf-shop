@@ -159,6 +159,7 @@ class PaymentSerializer(CommonFieldsSerializer):
         choices=Payment.Type.choices,
         allow_null=True,
         required=False,
+        help_text=dict(Payment.Type.choices),
     )
     identity_token = CharField(min_length=5, max_length=150, required=False)
     ref_id = CharField(min_length=5, max_length=150, required=False)
