@@ -31,7 +31,7 @@ def active_subscribes(user_id: int) -> QuerySet:
 def active_products(user_id: int) -> QuerySet:
     return Product.objects.filter(
         Q(orders__products__in=active_subscribes(user_id=user_id)) |
-        Q(packages__orders__products__in=active_subscribes(user_id=user_id))
+        Q(packages__products__in=active_subscribes(user_id=user_id))
     ).distinct()
 
 
