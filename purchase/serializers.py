@@ -148,6 +148,30 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
         ]
 
 
+class SubscribeOrderSerializer(CommonFieldsSerializer):
+    user = SimpleUserSerializer(read_only=True)
+    user_id = PrimaryKeyRelatedField(
+        source='user',
+        queryset=User.objects.all(),
+    )
+    products_ids = PrimaryKeyRelatedField(
+        source='products',
+        many=True,
+        queryset=Product.objects.filter(),
+        required=False,
+        allow_null=True,
+    )
+
+    class Meta:
+        model = Order
+        fields = [
+            *CommonFieldsSerializer.Meta.fields,
+            'user',
+            'user_id',
+            'subscribes_ids',
+        ]
+
+
 class PaymentSerializer(CommonFieldsSerializer):
     order = SimpleOrderSerializer(read_only=True)
     order_id = PrimaryKeyRelatedField(

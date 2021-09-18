@@ -7,7 +7,7 @@ from purchase.serializers import (
     PaymentSerializer,
     PriceSerializer,
     PackageSerializer,
-    SubscribeSerializer,
+    SubscribeSerializer, SubscribeOrderSerializer,
 )
 
 
@@ -34,6 +34,11 @@ class SubscribeViewSet(ModelViewSet):
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+
+class SubscribeOrderViewSet(ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = SubscribeOrderSerializer
 
 
 class PaymentViewSet(ModelViewSet):
