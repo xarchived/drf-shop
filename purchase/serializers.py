@@ -154,7 +154,7 @@ class SubscribeOrderSerializer(CommonFieldsSerializer):
         source='user',
         queryset=User.objects.all(),
     )
-    products_ids = PrimaryKeyRelatedField(
+    subscribes_ids = PrimaryKeyRelatedField(
         source='products',
         many=True,
         queryset=Product.objects.filter(),
