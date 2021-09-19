@@ -1,6 +1,7 @@
 from typing import Any
 
-from rest_framework.fields import CharField, IntegerField, ChoiceField
+from bon.models import Neighborhood
+from rest_framework.fields import CharField, IntegerField, ChoiceField, SerializerMethodField
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from auther.models import User, Role
@@ -154,13 +155,39 @@ class SubscribeOrderSerializer(CommonFieldsSerializer):
         source='user',
         queryset=User.objects.all(),
     )
-    subscribes_ids = PrimaryKeyRelatedField(
-        source='products',
-        many=True,
-        queryset=Product.objects.filter(id=Subscribe.objects.all()),
-        required=False,
-        allow_null=True,
-    )
+    subscribes = SerializerMethodField(read_only=True)
+    neighborhoods = SerializerMethodField(read_only=True)
+    packages = SerializerMethodField(read_only=True)
+
+    # noinspection PyMethodMayBeStatic
+    def get_subscribes(self, obj):
+        return [
+            {
+                'id': prd.id,
+                'name': prd.name,
+            }
+            for prd in obj.products.filter(id__in=Subscribe.objects.all())
+        ]
+
+    # noinspection PyMethodMayBeStatic
+    def get_neighborhoods(self, obj):
+        return [
+            {
+                'id': prd.id,
+                'name': prd.name,
+            }
+            for prd in obj.products.filter(id__in=Neighborhood.objects.all())
+        ]
+
+    # noinspection PyMethodMayBeStatic
+    def get_packages(self, obj):
+        return [
+            {
+                'id': prd.id,
+                'name': prd.name,
+            }
+            for prd in obj.products.filter(id__in=Package.objects.all())
+        ]
 
     class Meta:
         model = Order
@@ -168,7 +195,9 @@ class SubscribeOrderSerializer(CommonFieldsSerializer):
             *CommonFieldsSerializer.Meta.fields,
             'user',
             'user_id',
-            'subscribes_ids',
+            'subscribes',
+            'neighborhoods',
+            'packages',
         ]
 
 
