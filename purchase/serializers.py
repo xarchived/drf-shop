@@ -1,7 +1,6 @@
 from typing import Any
 
-from bon.models import Neighborhood
-from rest_framework.fields import CharField, IntegerField, ChoiceField, SerializerMethodField
+from rest_framework.fields import CharField, IntegerField, ChoiceField
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from auther.models import User, Role
@@ -146,58 +145,6 @@ class OrderSerializer(CommonFieldsSerializer, NestedModelSerializer):
             'user_id',
             'products',
             'products_ids',
-        ]
-
-
-class SubscribeOrderSerializer(CommonFieldsSerializer):
-    user = SimpleUserSerializer(read_only=True)
-    user_id = PrimaryKeyRelatedField(
-        source='user',
-        queryset=User.objects.all(),
-    )
-    subscribes = SerializerMethodField(read_only=True)
-    neighborhoods = SerializerMethodField(read_only=True)
-    packages = SerializerMethodField(read_only=True)
-
-    # noinspection PyMethodMayBeStatic
-    def get_subscribes(self, obj):
-        return [
-            {
-                'id': prd.id,
-                'name': prd.name,
-            }
-            for prd in obj.products.filter(id__in=Subscribe.objects.all())
-        ]
-
-    # noinspection PyMethodMayBeStatic
-    def get_neighborhoods(self, obj):
-        return [
-            {
-                'id': prd.id,
-                'name': prd.name,
-            }
-            for prd in obj.products.filter(id__in=Neighborhood.objects.all())
-        ]
-
-    # noinspection PyMethodMayBeStatic
-    def get_packages(self, obj):
-        return [
-            {
-                'id': prd.id,
-                'name': prd.name,
-            }
-            for prd in obj.products.filter(id__in=Package.objects.all())
-        ]
-
-    class Meta:
-        model = Order
-        fields = [
-            *CommonFieldsSerializer.Meta.fields,
-            'user',
-            'user_id',
-            'subscribes',
-            'neighborhoods',
-            'packages',
         ]
 
 
