@@ -1,1 +1,1 @@
-# drf-purchase
+# DRF Shop
