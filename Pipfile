@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 
 [dev-packages]
+flit = "*"
 
 [requires]
 python_version = "3.10"
