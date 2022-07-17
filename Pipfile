@@ -4,10 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+django = "*"
+djangorestframework = "*"
+drf-manipulation = "*"
 
 [dev-packages]
 flit = "*"
 pre-commit = "*"
+django-stubs = "*"
+djangorestframework-stubs = "*"
 
 [requires]
 python_version = "3.10"
