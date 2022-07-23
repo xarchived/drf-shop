@@ -44,3 +44,12 @@ repos:
           "--no-strict-optional",
           "--disallow-untyped-defs",
         ]
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.14
+    hooks:
+      - id: mdformat
+        args: [
+          "--wrap",
+          "79",
+          ".",
+        ]
