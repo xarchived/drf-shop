@@ -1,5 +1,6 @@
 from django.urls import include, path
 from rest_framework import routers
+from rest_framework.routers import BaseRouter
 
 from drf_shop.settings import DEBUG
 from drf_shop.views import (
@@ -13,6 +14,7 @@ from drf_shop.views import (
     ShopViewSet,
 )
 
+router: BaseRouter
 if DEBUG:
     router = routers.DefaultRouter()
 else:

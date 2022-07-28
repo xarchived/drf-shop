@@ -56,8 +56,8 @@ class Shop(BaseAbstractModel):
         db_index=True,
     )
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return str(self.name)
 
 
 class Product(BaseAbstractModel):
@@ -70,8 +70,8 @@ class Product(BaseAbstractModel):
         db_index=True,
     )
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return str(self.name)
 
 
 class Currency(BaseAbstractModel):
@@ -79,7 +79,7 @@ class Currency(BaseAbstractModel):
     code: TextField = TextField()
     fluctuates: FloatField = FloatField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} ({self.code})"
 
     class Meta:
@@ -110,7 +110,7 @@ class Rate(BaseAbstractModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.base.name} => {self.quote.name}"
 
 
@@ -137,7 +137,7 @@ class Price(BaseAbstractModel):
         ),
     ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.product.name}: {self.amount} {self.currency.name}"
 
 
