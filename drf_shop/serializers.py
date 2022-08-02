@@ -1,5 +1,4 @@
-from drf_manipulation.serializers import ManipulationSerializerMixin
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import DateTimeField, ModelSerializer
 
 from drf_shop.models import (
     Currency,
@@ -13,11 +12,15 @@ from drf_shop.models import (
 )
 
 
-class BaseSerializer(ModelSerializer, ManipulationSerializerMixin):
+class BaseSerializer(ModelSerializer):
+    created_at: DateTimeField = DateTimeField(read_only=True)
+    modified_at: DateTimeField = DateTimeField(read_only=True)
+
     class Meta:
         fields = [
-            *ManipulationSerializerMixin.Meta.fields,
             "id",
+            "created_at",
+            "modified_at",
         ]
 
 

@@ -17,7 +17,6 @@ from django.db.models import (
     TextField,
     UUIDField,
 )
-from drf_manipulation.models import ManipulationAbstractModel
 
 from drf_shop.settings import (
     ORDER_SHOP_NULL,
@@ -29,11 +28,19 @@ from drf_shop.settings import (
 # region Abstract Models
 
 
-class BaseAbstractModel(ManipulationAbstractModel):
+class BaseAbstractModel(Model):
     id: UUIDField = UUIDField(
         primary_key=True,
         default=uuid4,
         editable=False,
+        db_index=True,
+    )
+    created_at: DateTimeField = DateTimeField(
+        auto_now_add=True,
+        db_index=True,
+    )
+    modified_at: DateTimeField = DateTimeField(
+        auto_now=True,
         db_index=True,
     )
 
