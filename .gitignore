@@ -126,3 +126,7 @@ dmypy.json
 # Visual Studio Code
 .vscode/
 .history
+
+# Ignore PDM files
+.pdm.toml
+pdm.lock
