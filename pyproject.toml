@@ -1,6 +1,6 @@
 [project]
 name = "drf-shop"
-version = "0.1.1"
+version = "0.1.2-dev"
 description = "Basic models, serializers, and view to quickly create a shop"
 authors = [
     { name = "Xurvan", email = "xurvan@tutanota.com" },
