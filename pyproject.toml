@@ -8,8 +8,21 @@ authors = [
 requires-python = ">=3.10"
 readme = "README.md"
 license = { text = " Apache-2.0" }
-dependencies = []
+dependencies = [
+    "django>=4.1",
+    "djangorestframework>=3.13.1",
+]
+[project.optional-dependencies]
 
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]
 build-backend = "pdm.pep517.api"
+
+[tool]
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+    "django-stubs>=1.12.0",
+    "djangorestframework-stubs>=1.7.0",
+    "pre-commit>=2.20.0",
+]
